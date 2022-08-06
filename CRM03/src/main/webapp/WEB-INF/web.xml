@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>crm</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <!--
+  下面是对文件取名的限制：
+      add/create:跳转到添加页，或者打开添加操作的模态窗口
+      save:执行添加操作
+      edit:跳转到修改页，或者代开修改操作的模态窗口
+      uupdate:执行修改操作
+      get:执行查询操作
+      find/select/query...
+      特殊操作 login等
+  -->
+  <!--对过滤器进行注册-->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>crm.web.filter.EncodingFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>crm.web.filter.LoginFilter</filter-class>
+  </filter>
+  <!--对需要过滤的文件，使其在过滤器中进行注册-->
+  <!--此处使用过滤器的作用是防止登陆时的相关提示信息出现乱码，使用过滤器进行相关的格式设置-->
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+
+  <!--此处过滤器是为了防止恶意登录进行限制的-->
+  <filter-mapping>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+  <!--对数据字典进行相关处理的监听器-->
+  <listener>
+    <listener-class>crm.web.listener.SysInitListener</listener-class>
+  </listener>
+  <!--用户登录相关控制器-->
+  <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>crm.setting.web.controller.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserController</servlet-name>
+    <!--此处url的作用：
+            设置能够进入servlet的访问路径，将在前端页面写的路径在此进行注册，
+            当在前端进行访问时，我们可以进入此路径
+     -->
+    <url-pattern>/setting/user/login.do</url-pattern>
+  </servlet-mapping>
+
+  <!--市场活动相关控制器-->
+  <servlet>
+    <servlet-name>ActivityController</servlet-name>
+    <servlet-class>crm.workbench.web.controller.ActivityController</servlet-class>
+  </servlet>
+  <servlet>
+  <!--线索相关的控制器-->
+    <servlet-name>ClueController</servlet-name>
+    <servlet-class>crm.workbench.web.controller.ClueController</servlet-class>
+  </servlet>
+  <!--联系人相关的控制器-->
+  <servlet>
+    <servlet-name>ContactsController</servlet-name>
+    <servlet-class>crm.workbench.web.controller.ContactsController</servlet-class>
+  </servlet>
+
+  <!--顾客相关的控制器-->
+  <servlet>
+    <servlet-name>CustomerController</servlet-name>
+    <servlet-class>crm.workbench.web.controller.CustomerController</servlet-class>
+  </servlet>
+
+  <!--交易相关的控制器-->
+  <servlet>
+    <servlet-name>TranController</servlet-name>
+    <servlet-class>crm.workbench.web.controller.TranController</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+      <servlet-name>ActivityController</servlet-name>
+      <!--在此进行注册访问的路径最前方必须加上/  -->
+      <url-pattern>/workbench/activity/getUserList.do</url-pattern>
+      <url-pattern>/workbench/activity/save.do</url-pattern>
+      <url-pattern>/workbench/activity/pageList.do</url-pattern>
+      <url-pattern>/workbench/activity/delete.do</url-pattern>
+      <url-pattern>/workbench/activity/getUserListAndActivity.do</url-pattern>
+      <url-pattern>/workbench/activity/update.do</url-pattern>
+      <url-pattern>/workbench/activity/detail.do</url-pattern>
+      <url-pattern>/workbench/activity/getRemarkListByAid.do</url-pattern>
+      <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
+      <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
+      <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
+  </servlet-mapping>
+
+  <!--线索相关的控制器-->
+  <servlet-mapping>
+      <servlet-name>ClueController</servlet-name>
+      <url-pattern>/workbench/clue/getUserList.do</url-pattern>
+      <url-pattern>/workbench/clue/save.do</url-pattern>
+      <url-pattern>/workbench/clue/pageList.do</url-pattern>
+      <url-pattern>/workbench/clue/getUserListAndClue.do</url-pattern>
+      <url-pattern>/workbench/clue/update.do</url-pattern>
+      <url-pattern>/workbench/clue/delete.do</url-pattern>
+      <url-pattern>/workbench/clue/detail.do</url-pattern>
+      <url-pattern>/workbench/clue/showDetail.do</url-pattern>
+      <url-pattern>/workbench/clue/deleteZhuanFa.do</url-pattern>
+      <url-pattern>/workbench/clue/getRemarkListByAid.do</url-pattern>
+      <url-pattern>/workbench/clue/saveRemark.do</url-pattern>
+      <url-pattern>/workbench/clue/deleteRemark.do</url-pattern>
+      <url-pattern>/workbench/clue/getActivityListByClueId.do</url-pattern>
+      <url-pattern>/workbench/clue/unbund.do</url-pattern>
+      <url-pattern>/workbench/clue/getActivityListByNameAndNotByClueId.do</url-pattern>
+      <url-pattern>/workbench/clue/bund.do</url-pattern>
+      <url-pattern>/workbench/clue/convert.do</url-pattern>
+      <url-pattern>/workbench/clue/updateRemark.do</url-pattern>
+  </servlet-mapping>
+
+  <!--联系人相关的控制器-->
+  <servlet-mapping>
+    <servlet-name>ContactsController</servlet-name>
+    <url-pattern>/xxxx</url-pattern>
+  </servlet-mapping>
+
+  <!--顾客相关的控制器-->
+  <servlet-mapping>
+    <servlet-name>CustomerController</servlet-name>
+    <url-pattern>/xxxxx</url-pattern>
+  </servlet-mapping>
+
+  <!--交易相关的控制器-->
+  <servlet-mapping>
+      <servlet-name>TranController</servlet-name>
+      <url-pattern>/workbench/transaction/add.do</url-pattern>
+      <url-pattern>/workbench/transaction/getActivityListByNameAndNotByClueId.do</url-pattern>
+      <url-pattern>/workbench/transaction/getContactsListByName.do</url-pattern>
+      <url-pattern>/workbench/transaction/pageList.do</url-pattern>
+      <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+      <url-pattern>/workbench/transaction/save.do</url-pattern>
+      <url-pattern>/workbench/transaction/detail.do</url-pattern>
+      <url-pattern>/workbench/transaction/getRemarkListByTranId.do</url-pattern>
+      <url-pattern>/workbench/transaction/saveRemark.do</url-pattern>
+      <url-pattern>/workbench/transaction/deleteRemark.do</url-pattern>
+      <url-pattern>/workbench/transaction/updateRemark.do</url-pattern>
+      <url-pattern>/workbench/transaction/showTranHistoryListByTranId.do</url-pattern>
+      <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
+      <url-pattern>/workbench/chart/transaction/getCharts.do</url-pattern>
+  </servlet-mapping>
+  <!--<servlet>
+    <servlet-name>xxxController</servlet-name>
+    <servlet-class>xxx.xxxController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>xxxController</servlet-name>
+    <url-pattern>/xxx/xxx.do</url-pattern>
+    
+  </servlet-mapping>-->
+  
+  
+  
+</web-app>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

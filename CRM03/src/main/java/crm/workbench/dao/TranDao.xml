@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="crm.workbench.dao.TranDao">
+    <!--<select id="selectBlog" resultType="Blog">
+        select * from TranDao where id = #{id}
+    </select>-->
+    <select id="getCharts" resultType="map">
+        select
+        count(*) as value ,stage as name
+        from tbl_tran
+        group by stage
+    </select>
+    <select id="getTotal" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+    <update id="changeStage">
+        update tbl_tran set
+        stage=#{stage},
+        editBy=#{editBy},
+        editTime=#{editTime},
+        possibility=#{possibility}
+        where id=#{id}
+
+    </update>
+    <select id="detail" resultType="Tran">
+        select
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            cu.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            ac.name as activityId,
+            co.fullname as contactsId,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime,
+            t.possibility
+        from tbl_tran t
+        join tbl_user u
+        on u.id=t.owner
+        join tbl_customer cu
+        on t.customerId=cu.id
+        left join tbl_activity ac
+        on t.activityId=ac.id
+        left join tbl_contacts co
+        on t.contactsId=co.id
+        where t.id=#{id}
+    </select>
+    <select id="getTranListByCondition" resultType="Tran">
+        select
+        t.id,
+        t.name,
+        cu.name as customerId,
+        t.stage,
+        t.possibility,
+        t.type,
+        u.name as owner,
+        t.source,
+        co.fullname as contactsId,
+        a.name as activityId,
+        t.money,
+        t.expectedDate,
+        t.createBy,
+        t.description,
+        t.contactSummary,
+        t.nextContactTime,
+        t.createTime
+        from tbl_tran t
+        join tbl_customer cu
+        on t.customerId=cu.id
+        join tbl_contacts co
+        on t.contactsId=co.id
+        join tbl_user u
+        on t.owner=u.id
+        join tbl_activity a
+        on t.activityId=a.id
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%' #{name} '%'
+            </if>
+            <if test="customerId!=null and customerId!=''">
+                customerId like '%' #{customerId} '%'
+            </if>
+            <if test="stage!=null and stage!=''">
+                stage like '%' #{stage} '%'
+            </if>
+            <if test="type!=null and type!=''">
+                type like '%' #{type} '%'
+            </if>
+            <if test="owner!=null and owner!=''">
+                owner like '%' #{owner} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                source like '%' #{source} '%'
+            </if>
+            <if test="contactsId!=null and contactsId!=''">
+                contactsId like '%' #{contactsId} '%'
+            </if>
+        </where>
+        order by t.createTime desc
+        limit #{skipCount},#{pageSize}
+    </select>
+    <select id="getTotalByCondition" resultType="int">
+        select
+        count(*)
+        from tbl_tran
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%' #{name} '%'
+            </if>
+            <if test="customerId!=null and customerId!=''">
+                customerId like '%' #{customerId} '%'
+            </if>
+            <if test="stage!=null and stage!=''">
+                stage like '%' #{stage} '%'
+            </if>
+            <if test="type!=null and type!=''">
+                type like '%' #{type} '%'
+            </if>
+            <if test="owner!=null and owner!=''">
+                owner like '%' #{owner} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                source like '%' #{source} '%'
+            </if>
+            <if test="contactsId!=null and contactsId!=''">
+                contactsId like '%' #{contactsId} '%'
+            </if>
+        </where>
+    </select>
+    <insert id="save">
+        insert into tbl_tran(
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            possibility
+        )
+        values (
+            #{id},
+            #{owner},
+            #{money},
+            #{name},
+            #{expectedDate},
+            #{customerId},
+            #{stage},
+            #{type},
+            #{source},
+            #{activityId},
+            #{contactsId},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{possibility}
+        )
+    </insert>
+</mapper>
